@@ -162,20 +162,20 @@
                         showConfirmButton: false,
                         timer: 1000
                     });
-
                     // error clear    
                     document.getElementById("email_or_mobile_error").innerText = "";
                     document.getElementById("password_error").innerText = "";
                     //value clear
                     document.getElementById("email_or_mobile").value = "";
                     document.getElementById("password").value = "";
-
-
-                    let token = response.data.token // after login token
-                    setToken(token); //token pass config.js
-                    console.log(getToken()); //console
-
                     
+                    //set token
+                    let token = response.data.token
+                    setToken(token); 
+                    
+                    window.location.href="/dashboard"
+                    
+
                 } else if (response.data.status === "error") {
 
                     let message = response.data.message;
