@@ -50,40 +50,59 @@ class UserController extends Controller
      * Show the form login a new odience
      */
 
-     public function login(Request $request){
-        try{
-
-            $validator = Validator::make($request->all(), [
-                'email_or_mobile' => 'required | max:225',
-                'password' => 'required | max:225'
-            ],[
-                'email_or_phone.required' => 'Email or password is required',
-                'password.required' => 'Password field is required'    
-            ]);
-
-            if($validator->fails()){
-                return response()->json(["status" => "error", "errors" => $validator->errors()]);
-            }
-
-            $email_or_mobile = Str::lower(trim($request->input('email_or_mobile')));
-            $password = trim($request->input('password'));
-
-            $user = User::where('email',$email_or_mobile)->orWhere('mobile',$email_or_mobile)->first(); //find user by email or phone
-            $db_password = $user->password;
-
-            if($user && Hash::check($password, $db_password)){
-               $token = $user->createToken('authToken')->plainTextToken;
-               return response()->json(["status" => "success", "message" => "User Login Successfully.", "token" => $token]);
-            }else{
-                return response()->json(["status" => "error", "message"=> "User doesn't exists"]);
-            }
-            
-
-          
-        }catch(Exception $ex){
+     public function login(Request $request)
+     {
+         try {
+             $validator = Validator::make($request->all(), [
+                 'email_or_mobile' => 'required|max:225',
+                 'password' => 'required|max:225',
+             ], [
+                 'email_or_phone.required' => 'Email or password is required',
+                 'password.required' => 'Password field is required'
+             ]);
+     
+             if ($validator->fails()) {
+                 return response()->json([
+                     "status" => "error",
+                     "errors" => $validator->errors()
+                 ]);
+             }
+     
+             $email_or_mobile = Str::lower(trim($request->input('email_or_mobile')));
+             $password = trim($request->input('password'));
+     
+             // Find user by email or mobile
+             $user = User::where('email', $email_or_mobile)->orWhere('mobile', $email_or_mobile)->first();
+     
+             if (!$user) {
+                 return response()->json([
+                     "status" => "error",
+                     "message" => "Your email or mobile does not exists."
+                 ]);
+             }
+     
+             // Check password
+             if (!Hash::check($password, $user->password)) {
+                 return response()->json([
+                     "status" => "error",
+                     "message" => "Password is incorrect."
+                 ]); // Use HTTP status 401 for unauthorized
+             }
+     
+             // Create token
+             $token = $user->createToken('authToken')->plainTextToken;
+     
+             return response()->json([
+                 "status" => "success",
+                 "message" => "User Login Successfully.",
+                 "token" => $token
+             ], 200);
+     
+         } catch (\Exception $ex) {
             return response()->json(["status" => "fail", "message" => $ex->getMessage()]);
-        }
+         }
      }
+     
 
 
 

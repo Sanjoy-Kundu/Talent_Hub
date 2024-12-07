@@ -29,6 +29,7 @@
     <script src="js/sb-admin-2.min.js"></script>
     <script src="common_custom/js/axios.js"></script>
     <script src="common_custom/js/sweet_alert.js"></script>
+    <script src="common_custom/js/config.js"></script>
 
 </head>
 
@@ -57,19 +58,23 @@
                                     <section class="">
                                         <div class="form-group">
                                             <label for="email">Email Or Mobile</label>
-                                            <input type="text" class="form-control" id="email_or_mobile" name="email_or_mobile"
-                                                aria-describedby="email_or_mobile" placeholder="Enter your email or mobile">
+                                            <input type="text" class="form-control" id="email_or_mobile"
+                                                name="email_or_mobile" aria-describedby="email_or_mobile"
+                                                placeholder="Enter your email or mobile">
                                             <small id="email_or_mobile_error" class="form-text  text-danger"></small>
                                         </div>
 
-                                
+
 
                                         <div class="form-group">
                                             <label for="password">Password</label>
-                                            <input type="password" class="form-control myPassword" id="password"name="password" aria-describedby="password" placeholder="Enter your password">
-                                            <small id="password_error" class="form-text text-danger passowrdAndConfrimPasswordError"></small>
+                                            <input type="password" class="form-control myPassword"
+                                                id="password"name="password" aria-describedby="password"
+                                                placeholder="Enter your password">
+                                            <small id="password_error"
+                                                class="form-text text-danger passowrdAndConfrimPasswordError"></small>
                                             <input type="checkbox" onclick="togglePassword('password')">Show Password
-                                            
+
                                         </div>
 
 
@@ -87,7 +92,8 @@
                                         <a class="small" href="forgot-password.html">Forgot Password?</a>
                                     </div>
                                     <div class="text-center">
-                                        <a class="small" target="_blank" href="{{url('/registration')}}">Create an Account!</a>
+                                        <a class="small" target="_blank" href="{{ url('/registration') }}">Create an
+                                            Account!</a>
                                     </div>
                                 </div>
                             </div>
@@ -113,73 +119,41 @@
         }
 
 
-        async function onRegistration() {
+        async function onLogin() {
             try {
-            
-                document.getElementById("name_error").innerText = "";
-                document.getElementById("email_error").innerText = "";
-                document.getElementById("mobile_error").innerText = "";
+
+                document.getElementById("email_or_mobile_error").innerText = "";
                 document.getElementById("password_error").innerText = "";
-                document.getElementById("confirm_password_error").innerText = "";
 
-              
-                let name = document.getElementById("name").value.trim();
-                let email = document.getElementById("email").value.trim();
-                let mobile = document.getElementById("mobile").value.trim();
-                let password = document.getElementById("password").value;
-                let confirm_password = document.getElementById("confirm_password").value;
+                let email_or_mobile = document.getElementById("email_or_mobile").value.trim();
+                let password = document.getElementById("password").value.trim();
 
-               
+
                 let hasError = false;
 
-                if (!name) {
-                    document.getElementById("name_error").innerText = "Name is required.";
-                    hasError = true;
-                }
-                if (!email) {
-                    document.getElementById("email_error").innerText = "Email is required.";
-                    hasError = true;
-                }
-
-                if (!mobile) {
-                    document.getElementById("mobile_error").innerText = "Mobile is required.";
-                    hasError = true;
-                } else if (!/^\d{10,11}$/.test(mobile)) {
-                    document.getElementById("mobile_error").innerText = "Invalid mobile format.";
+                if (!email_or_mobile) {
+                    document.getElementById("email_or_mobile_error").innerText = "Input is required.";
                     hasError = true;
                 }
                 if (!password) {
                     document.getElementById("password_error").innerText = "Password is required.";
                     hasError = true;
-                }else if(password.length < 8){
-                    document.getElementById("password_error").innerText = "Passwords length must be 8 characters or more.";
+                } else if (password.length < 8) {
+                    document.getElementById("password_error").innerText =
+                        "Passwords length must be 8 characters or more.";
                     hasError = true
                 }
 
 
-                if (!confirm_password) {
-                    document.getElementById("confirm_password_error").innerText = "Confirm password is required.";
-                    hasError = true;
-                } else if (password !== confirm_password) {
-                    document.getElementById("confirm_password_error").innerText = "Passwords do not match.";
-                    hasError = true;
-                }
-
-           
                 if (hasError) return;
 
-           
+
                 let data = {
-                    name: name,
-                    email: email,
-                    mobile: mobile,
+                    email_or_mobile: email_or_mobile,
                     password: password,
                 };
 
-                // Send data to server
-                let response = await axios.post("/user-registration", data);
-
-                // Handle server response
+                let response = await axios.post("/user-login", data);
                 if (response.data.status === "success") {
                     Swal.fire({
                         position: "center",
@@ -188,50 +162,32 @@
                         showConfirmButton: false,
                         timer: 1000
                     });
-                    window.location.href="/dashboard"
-                // error clear    
-                document.getElementById("name_error").innerText = "";
-                document.getElementById("email_error").innerText = "";
-                document.getElementById("mobile_error").innerText = "";
-                document.getElementById("password_error").innerText = "";
-                document.getElementById("confirm_password_error").innerText = "";
 
-                //value clear
-                document.getElementById("name").value = "";
-                document.getElementById("email").value = "";
-                document.getElementById("mobile").value = "";
-                document.getElementById("password").value = "";
-                document.getElementById("confirm_password") = "";
+                    // error clear    
+                    document.getElementById("email_or_mobile_error").innerText = "";
+                    document.getElementById("password_error").innerText = "";
+                    //value clear
+                    document.getElementById("email_or_mobile").value = "";
+                    document.getElementById("password").value = "";
 
+
+                    let token = response.data.token // after login token
+                    setToken(token); //token pass config.js
 
                     
-                } else {
-               
-                    if (response.data.errors) {
-                        if (response.data.errors.name) {
-                            document.getElementById("name_error").innerText = response.data.errors.name[0];
-                        }
-                        if (response.data.errors.email) {
-                            document.getElementById("email_error").innerText = response.data.errors.email[0];
-                        }
-                        if (response.data.errors.mobile) {
-                            document.getElementById("mobile_error").innerText = response.data.errors.mobile[0];
-                        }
-                        if (response.data.errors.password) {
-                            document.getElementById("password_error").innerText = response.data.errors.password[0];
-                        }
+                } else if (response.data.status === "error") {
+
+                    let message = response.data.message;
+                    if (message === "Your email or mobile does not exists.") {
+                        document.getElementById("email_or_mobile_error").innerText = message;
+                    } else if (message === "Password is incorrect.") {
+                        document.getElementById("password_error").innerText = message;
                     }
                 }
             } catch (error) {
                 console.error("Error occurred:", error);
             }
         }
-
-        // Email validation function
-        // function validateEmail(email) {
-        //     let re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        //     return re.test(email);
-        // }
     </script>
 </body>
 
