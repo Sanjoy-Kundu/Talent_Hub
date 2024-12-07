@@ -172,8 +172,8 @@
                     //set token
                     let token = response.data.token
                     setToken(token); 
-                    
-                    window.location.href="/dashboard"
+                    console.log(HeaderToken())
+                    //window.location.href="/dashboard"
                     
 
                 } else if (response.data.status === "error") {
