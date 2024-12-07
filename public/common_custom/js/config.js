@@ -16,3 +16,12 @@ function HeaderToken(){
         }
     }
 }
+
+
+
+// function checkToken() {
+//     if (!localStorage.getItem('token')) {
+//         // Redirect to login if token not found
+//         window.location.href = '/login';
+//     }
+// }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -33,13 +34,21 @@ class UserController extends Controller
     /**
      * Display Showing Login Page
      */
-    public function login_page(){
-        try{
-            return view('pages.auth.loginPage');
-        }catch(Exception $ex){
-            return response()->json(["status" => "fail", "message" => $ex->getMessage()]);
-        }
-    }
+    // public function login_page(){
+    //     try{
+    //         return view('pages.auth.loginPage');
+    //     }catch(Exception $ex){
+    //         return response()->json(["status" => "fail", "message" => $ex->getMessage()]);
+    //     }
+    // }
+
+    public function login_page()
+{
+    // if (Auth::check()) {
+    //     return redirect()->url('/dashboard');
+    // }
+    return view('pages.auth.loginPage'); // login page
+}
 
 
 
