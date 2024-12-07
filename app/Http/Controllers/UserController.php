@@ -19,6 +19,64 @@ class UserController extends Controller
     }
 
     /**
+     * Display Showing Login Page
+     */
+    public function login_page(){
+        try{
+            return view('pages.loginPage');
+        }catch(Exception $ex){
+            return response()->json(["status" => "fail", "message" => $ex->getMessage()]);
+        }
+    }
+
+
+
+
+
+
+    /**
+     * Show the form login a new odience
+     */
+
+     public function login(Request $request){
+        try{
+
+            $validator = Validator::make($request->all(), [
+                'email_or_mobile' => 'required | max:225',
+                'password' => 'required | max:225'
+            ],[
+                'email_or_phone.required' => 'Email or password is required',
+                'password.required' => 'Password field is required'    
+            ]);
+
+            if($validator->fails()){
+                return response()->json(["status" => "error", "errors" => $validator->errors()]);
+            }
+
+            $email_or_mobile = Str::lower(trim($request->input('email_or_mobile')));
+            $password = trim($request->input('password'));
+
+            $user = User::where('email',$email_or_mobile)->orWhere('mobile',$email_or_mobile)->first(); //find user by email or phone
+            $db_password = $user->password;
+
+            if($user && Hash::check($password, $db_password)){
+               $token = $user->createToken('authToken')->plainTextToken;
+               return response()->json(["status" => "success", "message" => "User Login Successfully.", "token" => $token]);
+            }else{
+                return response()->json(["status" => "error", "message"=> "User doesn't exists"]);
+            }
+            
+
+          
+        }catch(Exception $ex){
+            return response()->json(["status" => "fail", "message" => $ex->getMessage()]);
+        }
+     }
+
+
+
+
+    /**
      * Show the form for registration a new odience.
      */
     public function registration(Request $request)

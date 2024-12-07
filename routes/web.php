@@ -9,4 +9,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//pages
+Route::get("/login", [UserController::class, "login_page"]);
+
+
 Route::post("/user-registration", [UserController::class, "registration"]);
+Route::post("/user-login", [UserController::class, "login"]);
+
