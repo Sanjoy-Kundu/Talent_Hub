@@ -1,5 +1,6 @@
 
 
 function setToken(token){
-console.log(token);
+    localStorage.setItem("token", `Bearer ${token}`);
 }
+
