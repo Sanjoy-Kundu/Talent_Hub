@@ -19,11 +19,23 @@ class UserController extends Controller
     }
 
     /**
-     * Display Showing Login Page
+     * Display Showing registration Page
      */
     public function registration_page(){
         try{
-            return view('pages.registrationPage');
+            return view('pages.auth.registrationPage');
+        }catch(Exception $ex){
+            return response()->json(["status" => "fail", "message" => $ex->getMessage()]);
+        }
+    }
+
+
+    /**
+     * Display Showing Login Page
+     */
+    public function login_page(){
+        try{
+            return view('pages.auth.loginPage');
         }catch(Exception $ex){
             return response()->json(["status" => "fail", "message" => $ex->getMessage()]);
         }

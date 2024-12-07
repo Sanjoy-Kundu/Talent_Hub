@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Registration</title>
+    <title>Login</title>
 
     <!-- Custom fonts for this template-->
     <link href="backend/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -52,29 +52,17 @@
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">Welcome To! TalentHub</h1>
+                                        <h1 class="h4 text-gray-900 mb-4">Welcome Back! TalentHub</h1>
                                     </div>
                                     <section class="">
                                         <div class="form-group">
-                                            <label for="name">Your Name</label>
-                                            <input type="text" class="form-control" id="name" name="name"
-                                                aria-describedby="name" placeholder="Enter your name">
-                                            <small id="name_error" class="form-text text-danger"></small>
+                                            <label for="email">Email Or Mobile</label>
+                                            <input type="text" class="form-control" id="email_or_mobile" name="email_or_mobile"
+                                                aria-describedby="email_or_mobile" placeholder="Enter your email or mobile">
+                                            <small id="email_or_mobile_error" class="form-text  text-danger"></small>
                                         </div>
 
-                                        <div class="form-group">
-                                            <label for="email">Email address</label>
-                                            <input type="email" class="form-control" id="email" name="email"
-                                                aria-describedby="email" placeholder="Enter your email">
-                                            <small id="email_error" class="form-text  text-danger"></small>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="mobile">Mobile</label>
-                                            <input type="tel" class="form-control" id="mobile" name="mobile"
-                                                aria-describedby="mobile" placeholder="018XXXXXXXX">
-                                            <small id="mobile_error" class="form-text  text-danger"></small>
-                                        </div>
+                                
 
                                         <div class="form-group">
                                             <label for="password">Password</label>
@@ -84,14 +72,8 @@
                                             
                                         </div>
 
-                                        <div class="form-group">
-                                            <label for="confirm_password">Confirm Password</label>
-                                            <input type="password" class="form-control" id="confirm_password" aria-describedby="confirm_password"placeholder="Enter your confirm password">
-                                            <small id="confirm_password_error" class="form-text text-danger"></small>
-                                            <input type="checkbox" onclick="togglePassword('confirm_password')">Show Password
-                                        </div>
 
-                                        <button class="btn btn-primary w-100" onclick="onRegistration()">Registration</button>
+                                        <button class="btn btn-primary w-100" onclick="onLogin()">Login</button>
                                         <hr>
                                         <a href="index.html" class="btn btn-google btn-user btn-block">
                                             <i class="fab fa-google fa-fw"></i> Login with Google
@@ -105,7 +87,7 @@
                                         <a class="small" href="forgot-password.html">Forgot Password?</a>
                                     </div>
                                     <div class="text-center">
-                                        <a class="small" href="register.html">Create an Account!</a>
+                                        <a class="small" target="_blank" href="{{url('/registration')}}">Create an Account!</a>
                                     </div>
                                 </div>
                             </div>
