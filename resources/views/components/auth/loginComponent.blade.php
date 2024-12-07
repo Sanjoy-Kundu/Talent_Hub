@@ -173,6 +173,7 @@
 
                     let token = response.data.token // after login token
                     setToken(token); //token pass config.js
+                    console.log(getToken()); //console
 
                     
                 } else if (response.data.status === "error") {
