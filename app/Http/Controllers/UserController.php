@@ -21,9 +21,9 @@ class UserController extends Controller
     /**
      * Display Showing Login Page
      */
-    public function login_page(){
+    public function registration_page(){
         try{
-            return view('pages.loginPage');
+            return view('pages.registrationPage');
         }catch(Exception $ex){
             return response()->json(["status" => "fail", "message" => $ex->getMessage()]);
         }
